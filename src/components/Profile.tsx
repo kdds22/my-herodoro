@@ -4,7 +4,7 @@ import style from '../styles/components/Profile.module.css';
 
 export default function Profile() {
 
-    const challengeContextData = useContext(ChallengesContext);
+    const { level } = useContext(ChallengesContext);
 
     return (
         <ChallengesContextProvider>
@@ -14,7 +14,7 @@ export default function Profile() {
                     <strong>Nome</strong>
                     <p>
                         <img src="icons/level.svg" alt="Level" />
-                        Level {challengeContextData.level}
+                        Level {level}
                     </p>
                 </div>
             </div>

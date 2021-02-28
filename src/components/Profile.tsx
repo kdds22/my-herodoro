@@ -11,7 +11,7 @@ export default function Profile() {
             <div className={style.profileContainer}>
                 <img src="https://github.com/kdds22.png" alt="Klaus Dellano" />
                 <div>
-                    <strong>Nome</strong>
+                    <strong>Klaus Dellano</strong>
                     <p>
                         <img src="icons/level.svg" alt="Level" />
                         Level {level}

@@ -4,17 +4,13 @@ import style from '../styles/components/ExperienceBar.module.css';
 
 export function ExperienceBar() {
 
-    const { currentExperience, experienceToNextLevel, initialExperience } = useContext(ChallengesContext);
+    const { currentExperience, experienceToNextLevel } = useContext(ChallengesContext);
 
-    const [percentToNextLevel, setPercentToNextLevel] = useState(Math.round(currentExperience * 100) / experienceToNextLevel);
-
-    useEffect(() => {
-        setPercentToNextLevel(Math.round(currentExperience * 100) / experienceToNextLevel);
-    }, [currentExperience]);
+    const percentToNextLevel = Math.round(currentExperience * 100) / experienceToNextLevel;
 
     return (
         <header className={style.experienceBar}>
-            <span>{initialExperience} XP</span>
+            <span>0 XP</span>
             <div>
                 <div style={{ width: `${percentToNextLevel}%` }}>
                 </div>

@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useEffect, useState } from "react";
 import challenges from '../../challenges.json';
 
 
@@ -11,10 +11,9 @@ interface ChallengeContextData {
     level: number,
     currentExperience: number,
     challengesCompleted: number,
-    initialExperience: number,
     experienceToNextLevel: number,
     activeChallenge: Challenge,
-    levelUpped: () => void,
+    levelUp: () => void,
     startNewChallenge: () => void,
     failedChallenge: () => void,
     succeededChallenge: () => void;
@@ -33,40 +32,56 @@ export function ChallengesContextProvider({ children }: ChallengeContextProps) {
     const [currentExperience, setCurrentExperience] = useState(0);
     const [challengesCompleted, setChallengesCompleted] = useState(0);
     const [activeChallenge, setActiveChallenge] = useState(null);
-    const [experienceToNextLevel, setExperienceToNextLevel] = useState(Math.round(Math.pow((level + 1) * 4.5, 2)))
-    const [initialExperience, setInitialExperience] = useState(0);
+    const [experienceToNextLevel, setExperienceToNextLevel] = useState(Math.round(Math.pow((level + 1) * 4.5, 2)));
+
+
+
+    useEffect(() => {
+        Notification.requestPermission();
+    }, []);
 
     function levelUp() {
         setLevel(level + 1);
-        setInitialExperience(initialExperience + experienceToNextLevel);
-        setExperienceToNextLevel(experienceToNextLevel + (Math.round(Math.pow((level + 1) * 4, 2))));
+        setExperienceToNextLevel(experienceToNextLevel + (Math.round(Math.pow((level + 1) * 2.5, 2))));
     }
 
     function startNewChallenge() {
         const challenge = challenges[Math.floor(Math.random() * challenges.length)];
         setActiveChallenge(challenge);
-    }
 
-    function failedChallenge() {
-        setActiveChallenge(null);
-        levelDownned();
-    }
 
-    function succeededChallenge() {
-        setCurrentExperience(currentExperience + (activeChallenge.amount));
-        setActiveChallenge(null);
-        setChallengesCompleted(challengesCompleted + 1);
-        levelUpped();
-    }
+        new Audio('/notification.mp3').play();
 
-    function levelUpped() {
-        if (currentExperience >= experienceToNextLevel) {
-            levelUp();
+        if (Notification.permission === 'granted') {
+            new Notification('Novo Desafio!!!', {
+                body: `Faça agora e ganhe ${challenge.amount} de XP!`
+            });
         }
     }
 
-    function levelDownned() {
-        setCurrentExperience(currentExperience - (activeChallenge.amount * 0.3));
+
+    function failedChallenge() {
+        setActiveChallenge(null);
+        //abaixar Vida
+    }
+
+    function succeededChallenge() {
+        if (!activeChallenge) {
+            return;
+        }
+
+        const { amount } = activeChallenge;
+
+        let finalExperience = currentExperience + amount;
+
+        if (finalExperience >= experienceToNextLevel) {
+            finalExperience = finalExperience - experienceToNextLevel;
+            levelUp();
+        }
+
+        setCurrentExperience(finalExperience);
+        setActiveChallenge(null);
+        setChallengesCompleted(challengesCompleted + 1);
     }
 
     return (
@@ -74,9 +89,8 @@ export function ChallengesContextProvider({ children }: ChallengeContextProps) {
             level,
             currentExperience,
             challengesCompleted,
-            initialExperience,
             experienceToNextLevel,
-            levelUpped,
+            levelUp,
             activeChallenge,
             startNewChallenge,
             failedChallenge,

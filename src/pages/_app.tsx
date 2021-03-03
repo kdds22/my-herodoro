@@ -1,8 +1,7 @@
-import React from 'react';
 import Head from 'next/head';
-
-import { ChallengesContextProvider } from '../contexts/ChallengesContext';
+import React from 'react';
 import '../styles/global.css';
+
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -10,9 +9,7 @@ function MyApp({ Component, pageProps }) {
       <Head>
         <title>Home | Pomohero</title>
       </Head>
-      <ChallengesContextProvider>
-        <Component {...pageProps} />
-      </ChallengesContextProvider>
+      <Component {...pageProps} />
     </>
   )
 }

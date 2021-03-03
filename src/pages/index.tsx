@@ -27,19 +27,16 @@ export default function Home(props) {
       <div className={style.container}>
 
         <ExperienceBar />
-
-        <CountdownContextProvider>
-          <section>
-            <div>
-              <Profile />
-              <CompletedChallenges />
-              <Countdown />
-            </div>
-            <div>
-              <ChallengeBox />
-            </div>
-          </section>
-        </CountdownContextProvider>
+        <section>
+          <div>
+            <Profile />
+            <CompletedChallenges />
+            <Countdown />
+          </div>
+          <div>
+            <ChallengeBox />
+          </div>
+        </section>
       </div>
     </ChallengesContextProvider>
   )

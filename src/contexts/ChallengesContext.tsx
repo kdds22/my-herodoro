@@ -34,11 +34,11 @@ export const ChallengesContext = createContext({} as ChallengeContextData);
 
 export function ChallengesContextProvider({ children, ...rest }: ChallengeContextProps) {
 
-    const [level, setLevel] = useState(rest.level ?? 0);
+    const [level, setLevel] = useState(rest.level ?? 1);
     const [currentExperience, setCurrentExperience] = useState(rest.currentExperience ?? 0);
     const [challengesCompleted, setChallengesCompleted] = useState(rest.challengesCompleted ?? 0);
     const [activeChallenge, setActiveChallenge] = useState(null);
-    const [experienceToNextLevel, setExperienceToNextLevel] = useState(Math.round(Math.pow((level + 1) * 4.5, 2)));
+    const experienceToNextLevel = Math.round(Math.pow((level + 1) * 4.5, 2));
     const [isLevelUpModalOpen, setIsLevelUpModalOpen] = useState(false);
 
     useEffect(() => {
@@ -53,12 +53,11 @@ export function ChallengesContextProvider({ children, ...rest }: ChallengeContex
 
     function levelUp() {
         setLevel(level + 1);
-        setExperienceToNextLevel(experienceToNextLevel + (Math.round(Math.pow((level + 1) * 2.5, 2))));
         setIsLevelUpModalOpen(true);
     }
 
     function closeLevelUpModal() {
-
+        setIsLevelUpModalOpen(false);
     }
 
     function startNewChallenge() {
@@ -115,8 +114,8 @@ export function ChallengesContextProvider({ children, ...rest }: ChallengeContex
         }}
         >
             {children}
-
             {isLevelUpModalOpen && <LevelUpModal />}
+
         </ChallengesContext.Provider>
     );
 }
